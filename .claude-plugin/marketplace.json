@@ -44,6 +44,13 @@
       "category": "productivity"
     },
     {
+      "name": "context-meter",
+      "source": "./plugins/context-meter",
+      "description": "How full your context is against a limit you set, as a bar at the bottom right that goes green, orange, then red.",
+      "version": "0.1.0",
+      "category": "productivity"
+    },
+    {
       "name": "image-preview",
       "source": "./plugins/image-preview",
       "description": "Hover a pasted [Image #N] to see the picture: above the prompt while you write, and on the prompts you sent.",

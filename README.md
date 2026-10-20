@@ -8,6 +8,7 @@ Plugins and mods for Claude Code by midudev, one per folder in [`plugins/`](plug
 | --- | --- | --- |
 | **Image Preview** | Hover a pasted `[Image #N]` to see the picture, while you write and on the prompts you sent. | [`plugins/image-preview/`](plugins/image-preview/README.md) |
 | **Sub Meter** | Subscription usage at the bottom right: the 5-hour and weekly windows, as a bar. | [`plugins/sub-meter/`](plugins/sub-meter/README.md) |
+| **Context Meter** | How full your context is against a limit you set, as a bar at the bottom right that goes green, orange, then red. | [`plugins/context-meter/`](plugins/context-meter/README.md) |
 | **Commit** | `/commit` asks commit + push, commit only or a new branch, then splits your changes into Conventional Commits, on Haiku 5.5. | [`plugins/commit/`](plugins/commit/README.md) |
 | **Narrator** | Click `⏸︎ narrator off` in the footer, or `/narrator`, and Claude tells you out loud what it did after each turn, in your language, with the best free voice your system has. | [`plugins/narrator/`](plugins/narrator/README.md) |
 
@@ -24,6 +25,7 @@ Plugins and mods for Claude Code by midudev, one per folder in [`plugins/`](plug
 /plugin marketplace add midudev/better-claude
 /plugin install image-preview@better-claude
 /plugin install sub-meter@better-claude
+/plugin install context-meter@better-claude
 /plugin install commit@better-claude
 /plugin install narrator@better-claude
 ```

@@ -1,0 +1,22 @@
+{
+  "name": "context-meter",
+  "version": "0.1.0",
+  "description": "How full your context is, against the model's window, as a bar at the bottom right, green up to a limit you choose and red past it.",
+  "author": {
+    "name": "Miguel Ángel Durán (midudev)",
+    "url": "https://github.com/midudev"
+  },
+  "homepage": "https://github.com/midudev/better-claude",
+  "repository": "https://github.com/midudev/better-claude",
+  "license": "MIT",
+  "keywords": ["context", "tokens", "limit", "status", "mod"],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "limitTokens": {
+      "type": "number",
+      "title": "Context limit (tokens)",
+      "description": "Leave empty to measure against the model's whole context window. Set a smaller size to keep the context under it, even if your model allows more: the bar fills up to it, green to 30%, orange to 80%, red after.",
+      "min": 1000
+    }
+  }
+}
