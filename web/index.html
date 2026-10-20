@@ -279,6 +279,10 @@
     .line .p { color: var(--clawd); user-select: none; }
     .footer-line { display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; }
     .footer-line .mode { color: #e5c07b; }
+    /* Context Meter: green to 30% of the window, orange to 80%, red after */
+    .zone-ok { color: #98c379; }
+    .zone-mid { color: #d19a66; }
+    .zone-high { color: #e06c75; }
     .up { color: #afd7ff; }
     .down { color: #87d787; }
     /* Image Preview: the chip lights as in the terminal, and its picture opens in a panel by the
@@ -568,6 +572,7 @@
         <ul class="picks">
           <li><button type="button" class="pick" data-plugin="image-preview" aria-pressed="true">Image Preview</button></li>
           <li><button type="button" class="pick" data-plugin="sub-meter" aria-pressed="true">Sub Meter</button></li>
+          <li><button type="button" class="pick" data-plugin="context-meter" aria-pressed="true">Context Meter</button></li>
           <li><button type="button" class="pick" data-plugin="commit" aria-pressed="true">Commit</button></li>
           <li><button type="button" class="pick" data-plugin="narrator" aria-pressed="true">Narrator</button></li>
           <li hidden><button type="button" class="pick" data-plugin="after" aria-pressed="true">After</button></li>
@@ -603,6 +608,16 @@
           <p>Your subscription usage, always at the bottom right: the 5-hour and the weekly windows take turns as a bar, with the time until each resets.</p>
           <div class="demo" role="group" aria-label="Demo">
             <p class="line footer-line"><span class="mode">⏵⏵ auto mode on</span><span id="sub-meter"><span class="dim">5h </span><span class="accent">━━━━━━</span><span class="dim">────</span> 58% <span class="dim">· 2h 10m</span></span></p>
+          </div>
+        </div>
+      </li>
+
+      <li class="plugin">
+        <div class="meta"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path fill="#5e5e5e" d="M0 5h16v1h-16zM0 10h16v1h-16zM0 6h1v4h-1zM15 6h1v4h-1z"/><path fill="#98c379" d="M2 7h4v2h-4z"/><path fill="#d19a66" d="M6 7h5v2h-5z"/><path fill="#e06c75" d="M11 7h3v2h-3z"/></svg><h2>Context Meter</h2><ul class="links"><li><a data-panel="source" href="https://github.com/midudev/better-claude/tree/main/plugins/context-meter"><svg aria-hidden="true"><use href="#i-source"/></svg><span>source</span></a></li><li><a data-panel="docs" href="https://github.com/midudev/better-claude/blob/main/plugins/context-meter/README.md"><svg aria-hidden="true"><use href="#i-docs"/></svg><span>docs</span></a></li><li><button type="button" data-install="context-meter"><svg aria-hidden="true"><use class="arrow" href="#i-arrow"/><use class="tray" href="#i-tray"/><use class="check" href="#i-check"/></svg><span>install</span></button></li></ul></div>
+        <div class="body">
+          <p>How full your context is, at the bottom right: a bar over the model's window, green to 30%, orange to 80% and red after. Set <code class="accent">limitTokens</code> (250k, say) to keep your context smaller than the model allows: that size becomes the full bar.</p>
+          <div class="demo" role="group" aria-label="Demo">
+            <p class="line footer-line"><span class="mode">⏵⏵ auto mode on</span><span id="context-meter"></span></p>
           </div>
         </div>
       </li>
@@ -983,6 +998,24 @@
         const filled = Math.round(percent / 10)
         meter.innerHTML = `<span class="dim">${label} </span><span class="accent">${'━'.repeat(filled)}</span><span class="dim">${'─'.repeat(10 - filled)}</span> ${percent}% <span class="dim">· ${resets}</span>`
       }, 4000)
+
+      // Context Meter: the bar fills as the context does, all green to 30%, all orange to 80%, all red after.
+      const context = $('#context-meter')
+      const FILLS = [18, 42, 66, 88, 100]
+      let contextFill = 1
+      function drawContext () {
+        const percent = FILLS[contextFill]
+        const filled = Math.round(percent / 10)
+        const zone = n => (n > 80 ? 'zone-high' : n > 30 ? 'zone-mid' : 'zone-ok')
+        const cells = `<span class="${zone(percent)}">${'━'.repeat(filled)}</span>`
+        const tokens = `${percent * 10}k`
+        context.innerHTML = `<span class="dim">ctx </span>${cells}<span class="dim">${'─'.repeat(10 - filled)}</span> <span class="${zone(percent)}">${percent}%</span> <span class="dim">${tokens}/1M</span>`
+      }
+      drawContext()
+      setInterval(() => {
+        contextFill = (contextFill + 1) % FILLS.length
+        drawContext()
+      }, 1600)
 
       // Image Preview: the picture opens by the pointer while it is on the chip, above it and to its
       // right, under it or to its left where there is no room, never over it, as the mod's window does.
